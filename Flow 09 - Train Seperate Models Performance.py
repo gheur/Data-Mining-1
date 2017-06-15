@@ -6,6 +6,7 @@ When predicting the results, model will be selected at the runtime based on the 
 import Dataset
 import h2o
 import numpy
+import pandas as pd
 from h2o.estimators import H2OGradientBoostingEstimator, H2ORandomForestEstimator, \
     H2ODeepLearningEstimator, H2OGeneralizedLinearEstimator
 
@@ -13,7 +14,7 @@ from h2o.estimators import H2OGradientBoostingEstimator, H2ORandomForestEstimato
 n_iterations = 10
 
 # Creating training frames
-pd_train = Dataset.PD_TRAIN
+pd_train = pd.read_csv('fe_train.csv')
 
 sj_train = pd_train[pd_train['city'] == 'sj']
 iq_train = pd_train[pd_train['city'] == 'iq']
@@ -42,10 +43,10 @@ sj_rmse = [] # Root Mean Squared Errors for sj model
 iq_rmse = [] # Root Mean Squared Errors for iq model
 
 for i in range(n_iterations):
-    model_sj = H2ODeepLearningEstimator(nfolds=10, hidden=[32, 32, 32, 32, 32, 32, 32, 32])
+    model_sj = H2OGradientBoostingEstimator(nfolds=10)
     model_sj.train(x=input_columns, y=response_column, training_frame=sj_training_frame)
 
-    model_iq = H2ODeepLearningEstimator(nfolds=10, hidden=[32, 32, 32, 32, 32, 32, 32, 32])
+    model_iq = H2OGradientBoostingEstimator(nfolds=10)
     model_iq.train(x=input_columns, y=response_column, training_frame=iq_training_frame)
 
     sj_mae.append(model_sj.mae())

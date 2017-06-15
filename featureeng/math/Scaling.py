@@ -9,3 +9,4 @@ def minMaxScaling(num_series):
         num_series[i] = float((num_series[i] - min_val)) / (max_val - min_val)
 
     return num_series
+
